@@ -5,11 +5,15 @@ go:
   - 1.5.2
 
 env:
+  global:
+      - secure: "c75ByTctEmar1OKbPVO0SZmnaUpN0oZaNf1l7YxlmAl6CHMtzXCMjaGfm2lYZQ0W0cfM+l0f1DXj33fxUybWLIY+BYBvXgMGj6H0osH/zXPnAM7GMMVlszcV6uR8givKcl98WBc9S622sXChyQxDM/WtefZRKlGRIuyFURpynflCvDu96J+eHny4k1172I+qhUSxIoM6v7NMU7h8eQw+E31V6yHOgXxPWAy1BqklUO86atRsVQdh7gHAjbZbjq6LsoDe+0W+yAR6exiTJyt5som9rskYsv/jYPlydxVr5k9IMxv7LnEkQUU/ZatO47DjyFWbQbutuGdvwyQSYU4U0mzj7Vu759hdDx67snD3+XPtzXn1p8dtoamAct7fTBm6bLHGkf0DHraYkDV6Xs0Jeg34LRFuGCXO+iRaof+Brjv6UHiWrXMndm4hQDc2laCywosa4zs0YY4ZCqHOj/6pulEcTgZOUIZfIXDVAXQWUzyLUWR0CM7SN44cX7W6LFAoRJNB21HbQxIICAT0Gy9TgtaKzUvronu4/VnARpiMZ5f1HODNGSwpy1ATxijHSYjLnh8l9i5SFfzXJfhHsUAbR6JoB8JJzJDG4bPjMGGdGahrmdmGhIcfYvb3oEgA2xYUM7W10UfOTM6h0YcuVXv+CwaXep9+JAXsQO2lHR0kmbo="
+      - secure: "Yue136GhurYS/hGzXp2G/YQu3Sy2LTH+ZDTaukVzbn91uAxoZGzNUC/RYYfK9ogchvJYHmMlfHSWHHWoEHzuonG68x70Cn30J+oH0WxNo4eJAKtDqWeRVvxYpVZTNxlqhj5fHbprVUo7dZCXXGM1TYslQHFdVJZ4bIHBEtw3yBE9d9tCp3XyKqPftcvrOUNHLAtRij/SOsG6o6T+McS5/t2ji4aj/jYASc+qYp0h+BklBhilpE9bRSmjXcZafyt+e31HcDH9A7YQO6QYrVK80Xd11SWalk8gYQdAIU+6BK52mlaVujfUCezF9oZFe/O7EYBhE8bP2tNIFmfs+EfmcJganYDtSqVFrYXMbaN1MxrK6xK4SuKfjipnYFx30/hPW85A1Pg3sG3VE8Yw92HYaRVI+3ctiys9o+Kg6rRT0Iv9p1uRXWLomylhCXQA3GB3n1PA2i3kUHNHwKVXvBugbCtwEsX2EvCTD13KY/t+zXaVkY/a9kmnEDIF64Zz9KDnZQ7IQr2ISjFxTdaWQgJo4FdgR5n9eeH49OqikUhU2dR8nVoWBbY03fawjWgZazxTEJa9aHW2UrGeO44gLM7jATE2gp0JZzFIHChlvvol4t6MQ/x1GcKCh19GsOChPhf+RZLdQ1cefwCOWX3yx8GQGK9YM8BHqAJt8Nk5ZsLbnzI="
   matrix:
     - COMPONENT=books_bot
 
 before_install:
   - env
+  - openssl aes-256-cbc -K $encrypted_7db146078b43_key -iv $encrypted_7db146078b43_iv -in key.pem.enc -out key.pem -d
   - |
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
@@ -28,12 +32,32 @@ script:
       echo "$COMPONENT wasn't updated, stopping build process"
       exit
     }
-    # if [ "$COMPONENT" = books_bot ]; then
-        # cd $COMPONENT
+    if [ "$COMPONENT" = books_bot ]; then
+        cd $COMPONENT
         cd books_bot
+        sed -i 's/<TOKEN>/$TOKEN/' main.go
         go test
         GOOS=linux GOARCH=amd64 go build -o ewokru_bot
-    # fi
+    fi
+
+after_script:
+    - |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
+    fi
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
+      echo "$COMPONENT wasn't updated, stopping deploy process"
+      exit
+    }
+    if [ "$COMPONENT" = books_bot ]; then
+      eval "$(ssh-agent -s)" 
+      chmod 600 key.pem
+      ssh-add key.pem
+
+      ssh $target rm -f /usr/local/bin/ewokru_bot
+      scp $COMPONENT/ewokru_bot $targer:/usr/local/bin
+      ssh $target "monit restart ewokru_bot"
+    fi
 
 branches:
   only:
