@@ -14,7 +14,6 @@ env:
 
 before_install:
   - env
-  - openssl aes-256-cbc -K $encrypted_7db146078b43_key -iv $encrypted_7db146078b43_iv -in key.pem.enc -out key.pem -d
   - |
     if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
       TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
@@ -23,6 +22,27 @@ before_install:
       echo "Only docs were updated, stopping build process."
       exit
     }
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
+      echo "$COMPONENT wasn't updated, stopping build process"
+      exit
+    }
+  - openssl aes-256-cbc -K $encrypted_7db146078b43_key -iv $encrypted_7db146078b43_iv -in key.pem.enc -out key.pem -d
+
+install:
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
+    fi
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
+      echo "$COMPONENT wasn't updated, stopping build process"
+      exit
+    }
+    if [ "$COMPONENT" = books_bot ]; then
+      go get golang.org/x/net/html
+      go get github.com/rockneurotiko/go-tgbot
+    elif [ "$COMPONENT" = wrapper ]; then
+      go get gopkg.in/yaml.v2
+    fi
 
 script:
   - |
@@ -73,9 +93,4 @@ addons:
 
 git:
   depth: 3
-
-install:
-  - go get golang.org/x/net/html
-  - go get github.com/rockneurotiko/go-tgbot
-  - go get gopkg.in/yaml.v2
 
