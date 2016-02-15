@@ -34,8 +34,8 @@ script:
     }
     if [ "$COMPONENT" = books_bot ]; then
         cd $COMPONENT
-        sed -i 's/<TOKEN>/$TELEGRAM_TOKEN/' main.go
-        go test 
+        sed -i "s/<TOKEN>/$TELEGRAM_TOKEN/" main.go
+        go test
         GOOS=linux GOARCH=amd64 go build -o ewokru_bot
         cd ../
     fi
