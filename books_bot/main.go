@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	VERSION = "0.1.2"
+	VERSION = "0.1.3"
 )
 
 func getHref(t html.Token) (ok bool, href string) {
