@@ -1,5 +1,4 @@
 // Simple bot
-// v0.1.1
 package main
 
 import (
@@ -10,6 +9,10 @@ import (
 	"golang.org/x/net/html"
 
 	"github.com/rockneurotiko/go-tgbot"
+)
+
+const (
+	VERSION = "0.1.2"
 )
 
 func getHref(t html.Token) (ok bool, href string) {
@@ -104,7 +107,7 @@ End:
 }
 
 func botStart(bot tgbot.TgBot, msg tgbot.Message, text string) *string {
-	r := "Bot started"
+	r := fmt.Sprintf("Bot started\nVersion: %s", VERSION)
 	showMenu(bot, msg, r)
 	return nil
 }
