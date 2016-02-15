@@ -1,6 +1,6 @@
 cmd:
 - name: rm
-  run: /usr/bin/rm
+  run: /bin/rm
   args:
   - arg:
     - r

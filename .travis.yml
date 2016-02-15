@@ -46,9 +46,9 @@ script:
         GOOS=linux GOARCH=amd64 go build -o ewokru_bot
         cd ../
     elif [ "$COMPONENT" = wrapper ]; then
-        cd $COMPONENT
+        cd $COMPONENT/wrapper
         go test
-        cd ../
+        cd ../../
     fi
 
 after_script:

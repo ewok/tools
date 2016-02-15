@@ -1,20 +1,22 @@
 // Package main provides ...
-package wrapper
+package main
 
 import (
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/ewok/tools/wrapper/wrapper"
 )
 
 func main() {
-	f := Forbidden{}
-	err := ReadForbidden("wrapper.yaml", &f)
+	f := wrapper.Forbidden{}
+	err := wrapper.ReadForbidden("wrapper.yaml", &f)
 	if err != nil {
-		err = ReadForbidden(os.Getenv("HOME")+"/wrapper.yaml", &f)
+		err = wrapper.ReadForbidden(os.Getenv("HOME")+"/wrapper.yaml", &f)
 		if err != nil {
-			err = ReadForbidden("/etc/wrapper.yaml", &f)
+			err = wrapper.ReadForbidden("/etc/wrapper.yaml", &f)
 			if err != nil {
 				fmt.Println("Config missed")
 				os.Exit(1)
@@ -22,7 +24,7 @@ func main() {
 		}
 	}
 
-	cmd, ok, err := Filter(strings.Join(os.Args, " "), f)
+	cmd, ok, err := wrapper.Filter(strings.Join(os.Args, " "), f)
 	if err != nil {
 		panic(err)
 	}
@@ -38,11 +40,5 @@ func main() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		// fmt.Printf("%s", out)
-		// shellCmd.Args = cc[1:]
-		// shellCmd.Stdin = &os.Stdin
-		// shellCmd.Stdout = os.Stdout
-		// shellCmd.Stderr = &os.Stderr
-		// shellCmd.Run()
 	}
 }
