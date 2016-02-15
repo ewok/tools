@@ -34,10 +34,10 @@ script:
     }
     if [ "$COMPONENT" = books_bot ]; then
         cd $COMPONENT
-        cd books_bot
         sed -i 's/<TOKEN>/$TELEGRAM_TOKEN/' main.go
-        go test
+        go test 
         GOOS=linux GOARCH=amd64 go build -o ewokru_bot
+        cd ../
     fi
 
 after_script:
@@ -50,18 +50,21 @@ after_script:
         exit
       }
       if [ "$COMPONENT" = books_bot ]; then
-      eval "$(ssh-agent -s)"
-      chmod 600 key.pem
-      ssh-add key.pem
+        eval "$(ssh-agent -s)"
+        chmod 600 key.pem
+        ssh-add key.pem
 
-      ssh $target rm -f /usr/local/bin/ewokru_bot
-      scp $COMPONENT/ewokru_bot $targer:/usr/local/bin
-      ssh $target "monit restart ewokru_bot"
+        ssh $target rm -f /usr/local/bin/ewokru_bot
+        scp $COMPONENT/ewokru_bot $targer:/usr/local/bin
+        ssh $target "monit restart ewokru_bot"
       fi
 
 branches:
   only:
   - master
+
+addons:
+  ssh_known_hosts: ewok.ru
 
 git:
   depth: 3
