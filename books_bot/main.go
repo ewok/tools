@@ -1,4 +1,5 @@
 // Simple bot
+// v0.1
 package main
 
 import (
