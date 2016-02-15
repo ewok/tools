@@ -65,6 +65,7 @@ branches:
 
 git:
   depth: 3
+
 install:
   - go get golang.org/x/net/html
   - go get github.com/rockneurotiko/go-tgbot

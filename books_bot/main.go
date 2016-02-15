@@ -1,4 +1,3 @@
-// Simple bot
 package main
 
 import (
