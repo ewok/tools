@@ -1,0 +1,14 @@
+cmd:
+- name: rm
+  run: /usr/bin/rm
+  args:
+  - arg:
+    - r
+    - R
+    - recursive
+  - arg:
+    - f
+    - force
+  - arg:
+    - /
+    - /etc

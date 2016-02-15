@@ -10,6 +10,7 @@ env:
       - secure: "Yue136GhurYS/hGzXp2G/YQu3Sy2LTH+ZDTaukVzbn91uAxoZGzNUC/RYYfK9ogchvJYHmMlfHSWHHWoEHzuonG68x70Cn30J+oH0WxNo4eJAKtDqWeRVvxYpVZTNxlqhj5fHbprVUo7dZCXXGM1TYslQHFdVJZ4bIHBEtw3yBE9d9tCp3XyKqPftcvrOUNHLAtRij/SOsG6o6T+McS5/t2ji4aj/jYASc+qYp0h+BklBhilpE9bRSmjXcZafyt+e31HcDH9A7YQO6QYrVK80Xd11SWalk8gYQdAIU+6BK52mlaVujfUCezF9oZFe/O7EYBhE8bP2tNIFmfs+EfmcJganYDtSqVFrYXMbaN1MxrK6xK4SuKfjipnYFx30/hPW85A1Pg3sG3VE8Yw92HYaRVI+3ctiys9o+Kg6rRT0Iv9p1uRXWLomylhCXQA3GB3n1PA2i3kUHNHwKVXvBugbCtwEsX2EvCTD13KY/t+zXaVkY/a9kmnEDIF64Zz9KDnZQ7IQr2ISjFxTdaWQgJo4FdgR5n9eeH49OqikUhU2dR8nVoWBbY03fawjWgZazxTEJa9aHW2UrGeO44gLM7jATE2gp0JZzFIHChlvvol4t6MQ/x1GcKCh19GsOChPhf+RZLdQ1cefwCOWX3yx8GQGK9YM8BHqAJt8Nk5ZsLbnzI="
   matrix:
     - COMPONENT=books_bot
+    - COMPONENT=wrapper
 
 before_install:
   - env
@@ -37,6 +38,10 @@ script:
         sed -i "s/<TOKEN>/$TELEGRAM_TOKEN/" main.go
         go test
         GOOS=linux GOARCH=amd64 go build -o ewokru_bot
+        cd ../
+    elif [ "$COMPONENT" = wrapper ]; then
+        cd $COMPONENT
+        go test
         cd ../
     fi
 
@@ -72,4 +77,5 @@ git:
 install:
   - go get golang.org/x/net/html
   - go get github.com/rockneurotiko/go-tgbot
+  - go get gopkg.in/yaml.v2
 
