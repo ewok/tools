@@ -30,13 +30,6 @@ before_install:
 
 install:
   - |
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
-    fi
-    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
-      echo "$COMPONENT wasn't updated, stopping build process"
-      exit
-    }
     if [ "$COMPONENT" = books_bot ]; then
       go get golang.org/x/net/html
       go get github.com/rockneurotiko/go-tgbot
@@ -46,13 +39,6 @@ install:
 
 script:
   - |
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
-    fi
-    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
-      echo "$COMPONENT wasn't updated, stopping build process"
-      exit
-    }
     if [ "$COMPONENT" = books_bot ]; then
         cd $COMPONENT
         sed -i "s/<TOKEN>/$TELEGRAM_TOKEN/" main.go
@@ -67,13 +53,6 @@ script:
 
 after_script:
     - |
-      if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-        TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
-      fi
-      git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
-        echo "$COMPONENT wasn't updated, stopping deploy process"
-        exit
-      }
       if [ "$COMPONENT" = books_bot ]; then
         eval "$(ssh-agent -s)"
         chmod 600 key.pem
