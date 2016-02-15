@@ -42,22 +42,22 @@ script:
 
 after_script:
     - |
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-      TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
-    fi
-    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
-      echo "$COMPONENT wasn't updated, stopping deploy process"
-      exit
-    }
-    if [ "$COMPONENT" = books_bot ]; then
-      eval "$(ssh-agent -s)" 
+      if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        TRAVIS_COMMIT_RANGE="FETCH_HEAD...$TRAVIS_BRANCH"
+      fi
+      git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
+        echo "$COMPONENT wasn't updated, stopping deploy process"
+        exit
+      }
+      if [ "$COMPONENT" = books_bot ]; then
+      eval "$(ssh-agent -s)"
       chmod 600 key.pem
       ssh-add key.pem
 
       ssh $target rm -f /usr/local/bin/ewokru_bot
       scp $COMPONENT/ewokru_bot $targer:/usr/local/bin
       ssh $target "monit restart ewokru_bot"
-    fi
+      fi
 
 branches:
   only:
@@ -69,3 +69,4 @@ git:
 install:
   - go get golang.org/x/net/html
   - go get github.com/rockneurotiko/go-tgbot
+
