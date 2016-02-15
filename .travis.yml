@@ -56,7 +56,7 @@ after_script:
 
         ssh $target rm -f /usr/local/bin/ewokru_bot
         scp $COMPONENT/ewokru_bot $target:/usr/local/bin
-        ssh $target "monit restart ewokru_bot;sleep 5;monit status ewokru_bot"
+        ssh $target "monit restart ewokru_bot"
       fi
 
 branches:
