@@ -55,7 +55,7 @@ after_script:
         ssh-add key.pem
 
         ssh $target rm -f /usr/local/bin/ewokru_bot
-        scp $COMPONENT/ewokru_bot $targer:/usr/local/bin
+        scp $COMPONENT/ewokru_bot $target:/usr/local/bin
         ssh $target "monit restart ewokru_bot"
       fi
 
