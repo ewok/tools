@@ -8,11 +8,12 @@ import (
 
 	"golang.org/x/net/html"
 
+	"github.com/ewok/tools/packfreebook"
 	"github.com/rockneurotiko/go-tgbot"
 )
 
 const (
-	VERSION = "0.1.4"
+	VERSION = "0.1.5"
 )
 
 func getHref(t html.Token) (ok bool, href string) {
@@ -26,7 +27,7 @@ func getHref(t html.Token) (ok bool, href string) {
 }
 
 func showMenu(bot tgbot.TgBot, msg tgbot.Message, message string) {
-	keylayout := [][]string{{"/Книги"}}
+	keylayout := [][]string{{"/Книги"}, {"/packtfreebook"}}
 	rkm := tgbot.ReplyKeyboardMarkup{
 		Keyboard:        keylayout,
 		ResizeKeyboard:  true,
@@ -112,6 +113,12 @@ func botStart(bot tgbot.TgBot, msg tgbot.Message, text string) *string {
 	return nil
 }
 
+func getPacktFreeBook(bot tgbot.TgBot, msg tgbot.Message, text string) *string {
+	r := fmt.Sprintf("Today book: %s", packfreebook.PackFreeBook())
+	showMenu(bot, msg, r)
+	return nil
+}
+
 func startBookMode(bot tgbot.TgBot, msg tgbot.Message, text string) *string {
 	r := "Введите название книги или имя автора"
 	hideMenu(bot, msg, r)
@@ -122,6 +129,7 @@ func main() {
 	token := "<TOKEN>"
 	bot := tgbot.NewTgBot(token)
 	bot.SimpleCommandFn(`^/start$`, botStart)
+	bot.SimpleCommandFn(`^/packtfreebook$`, getPacktFreeBook)
 
 	bot.StartChain().
 		SimpleCommandFn(`^/Книги$`, startBookMode).
