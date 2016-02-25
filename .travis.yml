@@ -33,6 +33,7 @@ install:
     if [ "$COMPONENT" = books_bot ]; then
       go get golang.org/x/net/html
       go get github.com/rockneurotiko/go-tgbot
+      go get github.com/andybalholm/cascadia
     elif [ "$COMPONENT" = wrapper ]; then
       go get gopkg.in/yaml.v2
     fi
