@@ -20,12 +20,17 @@ before_install:
     fi
     git diff --name-only $TRAVIS_COMMIT_RANGE | grep -vE '(\.md$)|(^(docs|examples))/' || {
       echo "Only docs were updated, stopping build process."
-      exit
     }
-    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" || {
-      echo "$COMPONENT wasn't updated, stopping build process"
-      exit
+    continue=0
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep "$COMPONENT" && {
+      echo "$COMPONENT was updated, continue build process"
+      continue=$((continue+1))
     }
+    git diff --name-only $TRAVIS_COMMIT_RANGE | grep ".travis.yml" && {
+      echo "Travis was updated, continue build process"
+      continue=$((continue+1))
+    }
+    if [ continue == 0 ];then exit;fi
   - openssl aes-256-cbc -K $encrypted_7db146078b43_key -iv $encrypted_7db146078b43_iv -in key.pem.enc -out key.pem -d
 
 install:
