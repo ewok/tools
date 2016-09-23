@@ -6,11 +6,10 @@
   hosts: "{{ server }}"
   tasks:
 
-    - file: path={{ item }} state=directory mode=0600 owner={{ ansible_user_id }}
+    - file: path={{ item }} state=directory mode=0700 owner={{ ansible_user_id }}
       with_items:
         - "~/.ssh"
         - "~/.mc"
-      become: True
 
     - name: Add ssh_key
       authorized_key: user={{ ansible_user_id }} key="{{lookup('file', '~/.ssh/id_rsa.pub')}}"
@@ -25,7 +24,7 @@
       copy: src=zshrc dest=~/.art/.zshrc mode=0644
 
     - name: copy mc config
-      copy: src={{ item }} dest="~/.mc"
+      copy: src={{ item }} dest="~/.mc/" mode=0644
       with_items:
         - "ini"
         - "panels.ini"
