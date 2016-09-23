@@ -15,4 +15,9 @@ AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); p
 AUTOSSH_GATETIME=30
 export AUTOSSH_POLL AUTOSSH_LOGFILE AUTOSSH_DEBUG AUTOSSH_PATH AUTOSSH_GATETIME AUTOSSH_PORT
 
-ssh -C -t $@ "tmux -L artur attach || tmux -L artur -f ~/.art/.tmux-art new"
+ssh -C -t $@ 'tmux -L artur attach'
+
+if [ $? != 0 ]
+then
+    ssh -C -t $@ "tmux -L artur -f ~/.art/.tmux-art new"
+fi

@@ -3,4 +3,4 @@
   with_items:
     - "zsh"
     - "tmux"
-    - "mosh"
+    - "mc"
