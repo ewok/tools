@@ -1,0 +1,11 @@
+{
+    "Token": "<TOKEN>",
+    "Debug": false,
+    "MessageOnDuty": "@%s хорошего дежурства!",
+    "MessageOffDuty": "@%s хорошего отдыха!",
+    "MessageNoDuty": "Дежурный не назначен, вызываем @devopsteam",
+    "MessageDuty": "Дежурный(@%s) предупрежден!",
+    "MessageNotInDutyGroup": "Вы не может взять дежурство, @%s",
+    "MessageNotDuty": "Вы не дежурите, @%s",
+    "DutyGroup": "general"
+}
