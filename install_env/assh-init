@@ -17,7 +17,8 @@ elif [[ $platform == 'macos' ]]; then
     cd $(dirname "$(readlink -n $0)")
 fi
 
-SSH="/usr/bin/ssh -o ConnectTimeout=10 -o BatchMode=yes"
+CP="/tmp/ssh_${1:0:50}_%r_%p"
+SSH="/usr/bin/ssh -o ConnectTimeout=10 -o BatchMode=yes -o ControlPath=\"$CP\""
 
 if [ "X$1" = "X" ]; then
 echo "usage: `basename $0` <host>"

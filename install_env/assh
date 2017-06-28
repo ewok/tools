@@ -10,14 +10,13 @@ if [ "X$SSH_AUTH_SOCK" = "X" ]; then
  ssh-add $HOME/.ssh/id_rsa
 fi
 
-AUTOSSH_POLL=20
-AUTOSSH_PORT=$(awk 'BEGIN { srand(); do r = rand()*32000; while ( r < 20000 ); printf("%d\n",r)  }' < /dev/null)
-AUTOSSH_GATETIME=30
-export AUTOSSH_POLL AUTOSSH_LOGFILE AUTOSSH_DEBUG AUTOSSH_PATH AUTOSSH_GATETIME AUTOSSH_PORT
 
-ssh -C -t $@ 'tmux -L artur attach'
+CP="/tmp/ssh_${1:0:50}_%r_%p"
+
+ssh -C -t -o "ControlPath=$CP" $@ 'tmux -L artur attach'
 
 if [ $? != 0 ]
 then
-    ssh -C -t $@ "tmux -L artur -f ~/.art/.tmux-art new"
+    ssh -C -t -o "ControlPath=$CP" $@ "tmux -L artur -f ~/.art/.tmux-art new"
 fi
+
