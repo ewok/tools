@@ -50,4 +50,3 @@
         - "/home/{{ ansible_user_id}}/.zsh_history-art"
       tags: clean
 
-
