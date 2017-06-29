@@ -34,7 +34,7 @@ for func in $^fpath/*(N-.x:t); autoload $func
 typeset -U path cdpath fpath manpath
 # Set/unset  shell options
 setopt   notify globdots correct pushdtohome cdablevars autolist
-setopt   correctall autocd recexact longlistjobs
+# setopt   correctall autocd recexact longlistjobs
 setopt   autoresume histignoredups pushdsilent noclobber
 setopt   autopushd pushdminus extendedglob rcquotes mailwarning
 unsetopt bgnice autoparamslash

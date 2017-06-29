@@ -25,6 +25,7 @@ unbind l
 unbind {
 unbind }
 unbind s
+unbind c
 
 bind-key a send-keys `
 bind-key k confirm-before kill-window
@@ -141,3 +142,4 @@ set -g message-bg colour166
 
 set-option -s history-limit 20000
 set-option -g default-command "ZDOTDIR=~/.art zsh"
+set-option -g detach-on-destroy off
