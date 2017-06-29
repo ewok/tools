@@ -142,4 +142,4 @@ set -g message-bg colour166
 
 set-option -s history-limit 20000
 set-option -g default-command "ZDOTDIR=~/.art zsh"
-set-option -g detach-on-destroy off
+# set-option -g detach-on-destroy off
