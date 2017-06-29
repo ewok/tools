@@ -27,6 +27,7 @@ if [ "X$SSH_AUTH_SOCK" = "X" ]; then
  ssh-add $HOME/.ssh/id_rsa
 fi
 
+echo "$@" >> ~/assh.log
 
 CP="/tmp/ssh_${1:0:50}_%r_%p"
 
