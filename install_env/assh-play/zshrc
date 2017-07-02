@@ -36,7 +36,7 @@ typeset -U path cdpath fpath manpath
 setopt   notify globdots correct pushdtohome cdablevars autolist
 # setopt   correctall autocd recexact longlistjobs
 setopt   autoresume histignoredups pushdsilent noclobber
-setopt   autopushd pushdminus extendedglob rcquotes mailwarning
+setopt   autopushd pushdminus extendedglob rcquotes mailwarning inc_append_history share_history
 unsetopt bgnice autoparamslash
 bindkey -e                 # emacs key bindings
 bindkey ' ' magic-space    # also do history expansion on space
