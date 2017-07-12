@@ -39,4 +39,6 @@ if ! ssh -t -o "ControlPath=$CP" $@ '[ -d .art ]'; then
     fi
 fi
 
+echo -ne "\033]0;$@\007"
+
 ssh -C -t -o "ControlPath=$CP" $@ 'SESS=$(tmux -L artur list-sessions | grep -v attached | cut -d: -f1 | head -n 1);if [[ -n "$SESS" ]];then tmux -L artur attach -t $SESS; else tmux -L artur -f ~/.art/.tmux-art new;fi'
