@@ -27,8 +27,6 @@ if [ "X$SSH_AUTH_SOCK" = "X" ]; then
  ssh-add $HOME/.ssh/id_rsa
 fi
 
-echo "$@" >> ~/assh.log
-
 CP="/tmp/ssh_${1:0:50}_%r_%p"
 
 if ! ssh -t -o "ControlPath=$CP" $@ '[ -d .art ]'; then
@@ -42,3 +40,7 @@ fi
 echo -ne "\033]0;$@\007"
 
 ssh -C -t -o "ControlPath=$CP" $@ 'SESS=$(tmux -L artur list-sessions | grep -v attached | cut -d: -f1 | head -n 1);if [[ -n "$SESS" ]];then tmux -L artur attach -t $SESS; else tmux -L artur -f ~/.art/.tmux-art new;fi'
+
+if [ $? -eq 0 ]; then
+    echo "$@" >> ~/assh.log
+fi
